@@ -4,15 +4,33 @@ export class ControladorHabitaciones{
     constructor(){}
     async registrandoHabitacion(peticion,respuesta){
         let objetoservicioHabitacion=new ServicioHabitacion()
+        let datosHabitacion=peticion.body
+        
         try{
-            let datosHabitacion=peticion.body
-            objetoservicioHabitacion.registrar(datosHabitacion)
-            respuesta.status(200).json({
-                "mensaje":"exito agregando datos",
-            })
+            if(datosHabitacion.precio<100 && datosHabitacion.numpersonas<2){
+                respuesta.status(400).json({
+                    "mensaje":"Revisa el precio por noche y la cantidd maxima de personas ingresadas"
+                })
 
-        }
-        catch(error){
+            }else if(datosHabitacion.precio<100){
+                respuesta.status(400).json({
+                    "mensaje":"revisa el precio por noche"
+                })
+            }else if(datosHabitacion.numpersonas<2){
+                respuesta.status(400).json({
+                    "mensaje":"muy poca gente en esta habitacion"
+                })
+            }
+            else{
+                await objetoservicioHabitacion.registrar(datosHabitacion)
+                respuesta.status(200).json({
+                    "mensaje":"exito agregando datos",
+                })
+
+            }
+
+
+        }catch(error){
             respuesta.status(400).json({
                 "mensaje":"fallamos en la operacion "+error
             })
@@ -24,10 +42,9 @@ export class ControladorHabitaciones{
         let objetoservicioHabitacion=new ServicioHabitacion()
         try{
             let idHabitacion=peticion.params.idhabitacion
-           
             respuesta.status(200).json({
                 "mensaje":"exito buscando la habitacion",
-                "habitacion":await objetoservicioHabitacion.buscarPorId
+                "habitacion":await objetoservicioHabitacion.buscarPorId(idHabitacion)
             })
 
         }
@@ -70,6 +87,22 @@ export class ControladorHabitaciones{
         }
     }
 
+    async eliminarHabitacion(peticion,respuesta){
+        let idHabitacion=peticion.params.idhabitacion
+        let objetoServicioHabitacion=new ServicioHabitacion()
+        try{
+            await objetoServicioHabitacion.eliminar(idHabitacion)
+            respuesta.status(200).json({
+                "mensaje":"exito eliminando habitacion",
+            })
+
+        }
+        catch(error){
+            respuesta.status(400).json({
+                "mensaje":"fallamos en la operacion "+error
+            })
+        }
+    }
 
 }
 

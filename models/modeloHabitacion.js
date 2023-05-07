@@ -12,15 +12,15 @@ const Habitacion = new Schema({
         require:true
     },
     descripcion:{
-        type:[String],
+        type:String,
         require:true
     },
     precio:{
-        type:[Number],
+        type:Number,
         require:true
     },
     numpersonas:{
-        type:[Number],
+        type:Number,
         require:true
     },
 })

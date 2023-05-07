@@ -39,6 +39,10 @@ const Reserva = new Schema({
         type:Number,
         require:true
     },
+    costoReserva:{
+        type:Number,
+        require:false
+    },
     
 })
-export const modeloHabitacion=mongoose.model('habitaciones',Habitacion)
+export const modeloReserva=mongoose.model('reservas',Reserva)
